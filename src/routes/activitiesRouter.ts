@@ -1,8 +1,12 @@
 import { Router } from "express";
-import { getAllActivities } from "../controller/activitieController";
+import {
+  createActivities,
+  getAllActivities,
+} from "../controller/activitieController";
 
 const router = Router();
 
-router.use("/", getAllActivities);
+router.get("/", getAllActivities);
+router.post("/", createActivities);
 
 export default router;
