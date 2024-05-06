@@ -1,14 +1,36 @@
 import { RequestHandler } from "express";
 import Activity from "../models/activity";
 import createError from "http-errors";
+import { Op } from "sequelize";
 
 export const getAllActivities: RequestHandler = async (req, res, next) => {
-  const data = await Activity.findAll();
+  try {
+    const { search } = req.query;
 
-  res.status(200).send({
-    message: "API berjalan heru",
-    data,
-  });
+    let condition = {
+      [Op.or]: [
+        {
+          activitieName: { [Op.like]: `%${search}%` }, // perubahan disini
+        },
+        {
+          projectName: { [Op.like]: `%${search}%` }, // perubahan disini
+        },
+      ],
+    };
+
+    const data = await Activity.findAll({
+      where: condition,
+    });
+
+    res.status(200).send({
+      message: "Success get data",
+      data,
+    });
+  } catch (error: any) {
+    res.status(error.status || 500).send({
+      message: error.message || "Internal Error!",
+    });
+  }
 };
 
 export const createActivities: RequestHandler = async (req, res, next) => {
