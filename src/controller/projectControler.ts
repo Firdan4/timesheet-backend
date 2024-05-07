@@ -19,8 +19,6 @@ export const getAllProject: RequestHandler = async (req, res, next) => {
 
 export const createProject: RequestHandler = async (req, res, next) => {
   try {
-    console.log(req.body);
-
     const existingData = await Project.findOne({
       where: {
         name: req.body.name,
