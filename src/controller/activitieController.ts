@@ -36,6 +36,12 @@ export const getAllActivities: RequestHandler = async (req, res, next) => {
 
 export const createActivities: RequestHandler = async (req, res, next) => {
   try {
+    const validationField = activitieSchema.safeParse(req.body);
+
+    if (!validationField.success) {
+      throw createError(400, "The data cannot be empty!");
+    }
+
     const existingData = await Activity.findOne({
       where: {
         activitieName: req.body.activitieName,
